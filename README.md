@@ -10,28 +10,27 @@ https://quarkus.io/guides/resteasy-client-multipart
 
 ```
 # ok
-curl -v -k -H 'accept: */*' -H 'Content-Type: multipart/form-data' -F 'files=@/home/marco/Downloads/file1.txt;type=text/plain' -X 'POST' 'http://localhost:8080/upload'
+curl -v -k -H 'accept: */*' -H 'Content-Type: multipart/form-data' -F 'files=@./files/file1.txt;type=text/plain' -X 'POST' 'http://localhost:8080/upload'
 ```
 
 ```
 # ok
-curl -v -k -H 'accept: */*' -H 'Content-Type: multipart/form-data' -F 'files=@/home/marco/Downloads/file1.txt;type=text/plain' -F 'files=@/home/marco/Downloads/file2.txt;type=text/plain' -X 'POST' 'http://localhost:8080/upload'
+curl -v -k -H 'accept: */*' -H 'Content-Type: multipart/form-data' -F 'files=@./files/file1.txt;type=text/plain' -F 'files=@/home/marco/Downloads/file2.txt;type=text/plain' -X 'POST' 'http://localhost:8080/upload'
 ```
 
 ```
 # ok
-curl -v -k -H 'accept: */*' -H 'Content-Type: multipart/form-data' -F 'files=@/home/marco/Downloads/Test.dmn;type=application/octet-stream' -X 'POST' 'http://localhost:8080/upload'
+curl -v -k -H 'accept: */*' -H 'Content-Type: multipart/form-data' -F 'files=@./files/ibm.gif;type=application/octet-stream' -X 'POST' 'http://localhost:8080/upload'
 ```
 
 ```
 # ok
-curl -v -k -H 'accept: */*' -H 'Content-Type: multipart/form-data' -F 'files=@/home/marco/Downloads/apache-maven-3.8.6-bin.tar.gz;type=application/octet-stream' -X 'POST' 'http://localhost:8080/upload'
+curl -v -k -H 'accept: */*' -H 'Content-Type: multipart/form-data' -F 'files=@./files/file-1k.txt;type=application/octet-stream' -X 'POST' 'http://localhost:8080/upload'
 ```
-
 
 ```
 # ko 413 Request Entity Too Large (application.properties: quarkus.http.limits.max-body-size)
-curl -v -k -H 'accept: */*' -H 'Content-Type: multipart/form-data' -F 'files=@/home/marco/Downloads/oc.tar;type=application/octet-stream' -X 'POST' 'http://localhost:8080/upload'
+curl -v -k -H 'accept: */*' -H 'Content-Type: multipart/form-data' -F 'files=@./files/file-5k.txt;type=application/octet-stream' -X 'POST' 'http://localhost:8080/upload'
 ```
 
 ```
