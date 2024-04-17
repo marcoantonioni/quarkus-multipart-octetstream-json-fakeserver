@@ -2,6 +2,64 @@
 
 Fake server used to test BAW BPMRESTRequest API
 
+## Build image
+
+```
+./mvnw package
+
+podman build -f src/main/docker/Dockerfile.jvm -t quay.io/marco_antonioni/quarkus-multipart-octetstream-json-fakeserver-jvm:latest .
+
+podman push quay.io/marco_antonioni/quarkus-multipart-octetstream-json-fakeserver-jvm:latest
+
+podman run -i --rm -p 8080:8080 quay.io/marco_antonioni/quarkus-multipart-octetstream-json-fakeserver-jvm:latest
+```
+
+## Deploy in OCP
+
+```
+TNS=fakeserver
+oc new-project ${TNS}
+
+cat <<EOF | oc create -f -
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: fakeserver
+  name: fakeserver
+  namespace: ${TNS}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fakeserver
+  template:
+    metadata:
+      labels:
+        app: fakeserver
+    spec:
+      containers:
+      - image: quay.io/marco_antonioni/quarkus-multipart-octetstream-json-fakeserver-jvm:latest
+        imagePullPolicy: Always
+        name: quarkus-multipart-octetstream-json-fakeserver-jvm
+EOF
+
+oc expose deployment fakeserver --port=8080
+
+oc create route edge fakeserver --service=fakeserver
+
+URL="https://"$(oc get routes fakeserver | grep -v NAME | awk '{print $2}')
+
+
+# wait for pod ready
+
+curl -v -k -H 'Content-Type: application/json' -d '{"name":"Marco","address":"viavai","level":1}' -X POST ${URL}/api/jsondata | jq .
+
+curl -v -k -H 'accept: */*' -H 'Content-Type: multipart/form-data' -F 'files=@./files/file1.txt;type=text/plain' -F 'files=@/home/marco/Downloads/file2.txt;type=text/plain' -X 'POST' ${URL}/upload
+
+```
+
+
 ## Test commands
 
 https://quarkus.io/guides/resteasy-client-multipart
