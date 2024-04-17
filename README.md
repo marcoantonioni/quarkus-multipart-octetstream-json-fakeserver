@@ -4,6 +4,67 @@ Fake server used to test BAW BPMRESTRequest API
 
 ## Test commands
 
+https://quarkus.io/guides/resteasy-client-multipart
+
+### Files
+
+```
+# ok
+curl -v -k -H 'accept: */*' -H 'Content-Type: multipart/form-data' -F 'files=@/home/marco/Downloads/file1.txt;type=text/plain' -X 'POST' 'http://localhost:8080/upload'
+```
+
+```
+# ok
+curl -v -k -H 'accept: */*' -H 'Content-Type: multipart/form-data' -F 'files=@/home/marco/Downloads/file1.txt;type=text/plain' -F 'files=@/home/marco/Downloads/file2.txt;type=text/plain' -X 'POST' 'http://localhost:8080/upload'
+```
+
+```
+# ok
+curl -v -k -H 'accept: */*' -H 'Content-Type: multipart/form-data' -F 'files=@/home/marco/Downloads/Test.dmn;type=application/octet-stream' -X 'POST' 'http://localhost:8080/upload'
+```
+
+```
+# ok
+curl -v -k -H 'accept: */*' -H 'Content-Type: multipart/form-data' -F 'files=@/home/marco/Downloads/apache-maven-3.8.6-bin.tar.gz;type=application/octet-stream' -X 'POST' 'http://localhost:8080/upload'
+```
+
+
+```
+# ko 413 Request Entity Too Large (application.properties: quarkus.http.limits.max-body-size)
+curl -v -k -H 'accept: */*' -H 'Content-Type: multipart/form-data' -F 'files=@/home/marco/Downloads/oc.tar;type=application/octet-stream' -X 'POST' 'http://localhost:8080/upload'
+```
+
+```
+# ko per 415 Unsupported Media Type (Content-Type: application/octet-stream)
+curl -v -k -H 'accept: */*' -H 'Content-Type: application/octet-stream' -F 'files=@/home/marco/Downloads/Test.dmn;type=application/octet-stream' -X 'POST' 'http://localhost:8080/upload'
+```
+
+
+### json data
+
+```
+# ok
+curl -v -k -X GET http://localhost:8080/api/jsondata | jq .
+```
+
+```
+# ok
+curl -v -k -H 'Content-Type: application/json' -d '{"name":"Marco","address":"viavai","level":1}' -X POST http://localhost:8080/api/jsondata | jq .
+```
+
+### text data
+
+```
+# ok
+curl -v -k -H 'Content-Type: application/octet-stream' -d 'This is a message' -X POST http://localhost:8080/api/textdata
+```
+
+```
+# ok pass json as string
+curl -v -k -H 'Content-Type: application/octet-stream' -d '{"name":"Marco","address":"viavai","level":1}' -X POST http://localhost:8080/api/textdata
+```
+
+
 
 
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
