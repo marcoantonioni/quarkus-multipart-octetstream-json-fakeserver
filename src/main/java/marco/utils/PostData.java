@@ -28,7 +28,11 @@ public class PostData {
     @Path("jsondata")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response postJsonData(MyData data) throws IOException {
-        System.out.println("===>> postJsonData() " + data.toString());
+        if ( data != null ) {
+            System.out.println("===>> postJsonData() " + data.toString());
+        } else {
+            System.out.println("===>> postJsonData() data is null");
+        }
         return Response.status(200).build();
     }
 
@@ -49,7 +53,7 @@ public class PostData {
     @Path("textdata")
     @Consumes(MediaType.TEXT_PLAIN)
     public Response postTextData(String data) throws IOException {
-        System.out.println("===>> postTextData() " + data);
+        System.out.println("===>> postTextData() " + data == null ? "data is null":data);
         return Response.status(200).build();
     }
 

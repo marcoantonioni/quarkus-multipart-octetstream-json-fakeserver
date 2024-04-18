@@ -5,6 +5,8 @@ Fake server used to test BAW BPMRESTRequest API
 Documentation
 1. https://www.ibm.com/docs/en/baw/23.x?topic=30-restrictions-invoking-rest-api-service
 2. https://www.ibm.com/support/pages/using-openapi-30-rest-services-ibm-business-automation-workflow-and-ibm-integration-designer
+3. https://www.ibm.com/docs/en/baw/23.x?topic=service-invoking-rest-by-using-javascript
+4. https://www.ibm.com/docs/en/baw/23.x?topic=javascript-passing-files
 
 BAW 23.0.2 - OpenAPI The only media types supported are
 ```

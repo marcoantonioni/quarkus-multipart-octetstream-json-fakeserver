@@ -66,7 +66,7 @@ public class UploadResource {
                 .build();
     }
 
-    
+
     // Class that will define the OpenAPI schema for the binary type input (upload)
     @Schema(type = SchemaType.STRING, format = "binary")
     public interface UploadItemSchema {
@@ -80,6 +80,5 @@ public class UploadResource {
         @RestForm("files")
         public List<FileUpload> files;
     }
-    
 
 }
