@@ -2,12 +2,26 @@
 
 Fake server used to test BAW BPMRESTRequest API
 
+Documentation
+1. https://www.ibm.com/docs/en/baw/23.x?topic=30-restrictions-invoking-rest-api-service
+2. https://www.ibm.com/support/pages/using-openapi-30-rest-services-ibm-business-automation-workflow-and-ibm-integration-designer
+
+BAW 23.0.2 - OpenAPI The only media types supported are
+```
+application/json
+application/xml
+text/xml
+text/plain
+```
+
 ## Build image
 
 ```
 ./mvnw package
 
 podman build -f src/main/docker/Dockerfile.jvm -t quay.io/marco_antonioni/quarkus-multipart-octetstream-json-fakeserver-jvm:latest .
+
+podman login -u $QUAY_USER -p $QUAY_PWD quay.io
 
 podman push quay.io/marco_antonioni/quarkus-multipart-octetstream-json-fakeserver-jvm:latest
 
@@ -16,9 +30,13 @@ podman run -i --rm -p 8080:8080 quay.io/marco_antonioni/quarkus-multipart-octets
 
 ## Deploy in OCP
 
+
 ```
 TNS=fakeserver
 oc new-project ${TNS}
+
+oc delete deployment fakeserver
+oc delete service fakeserver
 
 cat <<EOF | oc create -f -
 apiVersion: apps/v1
@@ -113,12 +131,12 @@ curl -v -k -H 'Content-Type: application/json' -d '{"name":"Marco","address":"vi
 
 ```
 # ok
-curl -v -k -H 'Content-Type: application/octet-stream' -d 'This is a message' -X POST http://localhost:8080/api/textdata
+curl -v -k -H 'Content-Type: text/plain' -d 'This is a message' -X POST http://localhost:8080/api/textdata
 ```
 
 ```
 # ok pass json as string
-curl -v -k -H 'Content-Type: application/octet-stream' -d '{"name":"Marco","address":"viavai","level":1}' -X POST http://localhost:8080/api/textdata
+curl -v -k -H 'Content-Type: text/plain' -d '{"name":"Marco","address":"viavai","level":1}' -X POST http://localhost:8080/api/textdata
 ```
 
 

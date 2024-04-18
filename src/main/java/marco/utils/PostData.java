@@ -23,22 +23,16 @@ import jakarta.ws.rs.core.Response;
 @Produces(MediaType.APPLICATION_JSON)
 public class PostData {
 
+    // BAW compatible
     @POST
     @Path("jsondata")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces()
-    @APIResponse(
-        responseCode = "200",
-        description = "MyData Created",
-        content = @Content(mediaType = MediaType.APPLICATION_JSON, schema=@Schema(type = SchemaType.OBJECT, implementation = MyData.class))
-        )
     public Response postJsonData(MyData data) throws IOException {
-
         System.out.println("===>> postJsonData() " + data.toString());
-
-        return Response.accepted().entity(data).build();
+        return Response.status(200).build();
     }
 
+    // BAW compatible
     @GET
     @Path("jsondata")
     @Produces(MediaType.APPLICATION_JSON)
@@ -46,25 +40,17 @@ public class PostData {
     public MyData getJsonData() throws IOException {
         MyData data = new MyData("name", "address", 1);
         System.out.println("===>> getJsonData(): " + data.toString());
-
         return data;
     }
 
 
+    // BAW compatible
     @POST
     @Path("textdata")
-    @Consumes(MediaType.APPLICATION_OCTET_STREAM)
-    @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    @APIResponse(
-        responseCode = "200",
-        description = "Text Created",
-        content = @Content(mediaType = MediaType.APPLICATION_OCTET_STREAM, schema=@Schema(type = SchemaType.OBJECT, implementation = String.class))
-        )
+    @Consumes(MediaType.TEXT_PLAIN)
     public Response postTextData(String data) throws IOException {
-
         System.out.println("===>> postTextData() " + data);
-
-        return Response.accepted().entity("RECEIVED: "+data).build();
+        return Response.status(200).build();
     }
 
 }

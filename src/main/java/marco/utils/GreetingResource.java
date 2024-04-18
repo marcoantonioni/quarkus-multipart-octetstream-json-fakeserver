@@ -11,6 +11,7 @@ public class GreetingResource {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String ping() {
+        System.out.println("===> PING");
         return "fakeserver";
     }
 }
