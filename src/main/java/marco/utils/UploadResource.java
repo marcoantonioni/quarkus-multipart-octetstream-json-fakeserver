@@ -13,6 +13,7 @@ import org.jboss.logging.Logger;
 import org.jboss.resteasy.reactive.MultipartForm;
 import org.jboss.resteasy.reactive.RestForm;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
+import org.jboss.resteasy.reactive.server.spi.RuntimeConfiguration.Body;
 
 import io.vertx.core.eventbus.EventBus;
 import jakarta.enterprise.context.RequestScoped;
@@ -31,15 +32,17 @@ public class UploadResource {
     @Inject
     EventBus bus;
 
-    // BAW NOT compatible
+    // BAW compatible using single document payload
     @POST
     @Consumes(jakarta.ws.rs.core.MediaType.MULTIPART_FORM_DATA)    
     @APIResponse(responseCode = "202")
     public Response upload(@MultipartForm MultipartBody body) throws IOException {
 
         if (body != null) {
-            LOG.info("upload() quantity of files: " + body.files.size());
 
+            /*
+             * Array
+            LOG.info("upload() quantity of files: " + body.files.size());
             for (FileUpload file : body.files) {
 
                 LOG.info("===>> filePath: " + file.filePath());
@@ -56,6 +59,21 @@ public class UploadResource {
                     bus.send("file-service", br);
                 }
             }
+            */
+            LOG.info("upload() single file");
+                LOG.info("===>> filePath: " + body.file.filePath());
+                LOG.info("===>> fileName: " + body.file.fileName());
+                LOG.info("===>> uploadedFile: " + body.file.uploadedFile());
+                LOG.info("===>> name: " + body.file.name());
+                LOG.info("===>> contentType: " + body.file.contentType());
+                LOG.info("===>> size: " + body.file.size());
+                LOG.info("===>> charSet: " + body.file.charSet());
+                LOG.info("----------------------------------");
+
+                if (body.file.contentType().equals("text/plain")) {
+                    BufferedReader br = Files.newBufferedReader(body.file.filePath());
+                    bus.send("file-service", br);
+                }
 
             LOG.info("upload() before response Accepted");
         } else {
@@ -75,10 +93,20 @@ public class UploadResource {
     // We instruct OpenAPI to use the schema provided by the 'UploadFormSchema'
     // class implementation and thus define a valid OpenAPI schema for the Swagger
     // UI
+    /*
+     * array
     public static class MultipartBody {
         @Schema(implementation = UploadItemSchema[].class)
         @RestForm("files")
         public List<FileUpload> files;
+    }
+     */
+
+     // single file
+    public static class MultipartBody {
+        @Schema(implementation = UploadItemSchema.class)
+        @RestForm("file")
+        public FileUpload file;
     }
 
 }

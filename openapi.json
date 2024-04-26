@@ -1,0 +1,130 @@
+{
+  "openapi" : "3.0.3",
+  "info" : {
+    "title" : "quarkus-multipart-octetstream-json-fakeserver API",
+    "version" : "1.0.0-SNAPSHOT"
+  },
+  "paths" : {
+    "/api/jsondata" : {
+      "get" : {
+        "tags" : [ "Post Data" ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MyData"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Post Data" ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/MyData"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      }
+    },
+    "/api/textdata" : {
+      "post" : {
+        "tags" : [ "Post Data" ],
+        "requestBody" : {
+          "content" : {
+            "text/plain" : {
+              "schema" : {
+                "type" : "string"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      }
+    },
+    "/fakeserver/ping" : {
+      "get" : {
+        "tags" : [ "Greeting Resource" ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "text/plain" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/upload" : {
+      "post" : {
+        "tags" : [ "Upload Resource" ],
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "files" : {
+                    "type" : "array",
+                    "items" : {
+                      "$ref" : "#/components/schemas/UploadItemSchema"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "202" : { }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "FileUpload" : {
+        "type" : "object"
+      },
+      "MyData" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string"
+          },
+          "address" : {
+            "type" : "string"
+          },
+          "level" : {
+            "format" : "int32",
+            "type" : "integer"
+          }
+        }
+      },
+      "UploadItemSchema" : {
+        "format" : "binary",
+        "type" : "string"
+      }
+    }
+  }
+}

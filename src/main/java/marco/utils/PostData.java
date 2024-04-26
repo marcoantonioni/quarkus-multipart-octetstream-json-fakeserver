@@ -53,7 +53,7 @@ public class PostData {
     @Path("textdata")
     @Consumes(MediaType.TEXT_PLAIN)
     public Response postTextData(String data) throws IOException {
-        System.out.println("===>> postTextData() " + data == null ? "data is null":data);
+        System.out.println("===>> postTextData() [" + data + "]");
         return Response.status(200).build();
     }
 
