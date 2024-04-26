@@ -84,11 +84,8 @@
               "schema" : {
                 "type" : "object",
                 "properties" : {
-                  "files" : {
-                    "type" : "array",
-                    "items" : {
-                      "$ref" : "#/components/schemas/UploadItemSchema"
-                    }
+                  "file" : {
+                    "$ref" : "#/components/schemas/UploadItemSchema"
                   }
                 }
               }

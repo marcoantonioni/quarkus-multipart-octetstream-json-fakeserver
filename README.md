@@ -142,6 +142,25 @@ curl -v -k -H 'Content-Type: text/plain' -d 'This is a message' -X POST http://l
 curl -v -k -H 'Content-Type: text/plain' -d '{"name":"Marco","address":"viavai","level":1}' -X POST http://localhost:8080/api/textdata
 ```
 
+# Export OpenAPI
+
+For "/upload" path change $ref with inline type/format attributes (due to BAW limits)
+```
+                "properties" : {
+                  "file" : {
+                    "$ref" : "#/components/schemas/UploadItemSchema"
+                  }
+                }
+```
+with
+```
+                "properties" : {
+                  "file" : {
+                    "type": "string",
+                    "format" : "binary"
+                  }
+                }
+```
 
 
 

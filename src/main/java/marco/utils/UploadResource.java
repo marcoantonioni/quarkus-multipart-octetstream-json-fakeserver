@@ -15,6 +15,7 @@ import org.jboss.resteasy.reactive.RestForm;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 import org.jboss.resteasy.reactive.server.spi.RuntimeConfiguration.Body;
 
+import io.vertx.codegen.annotations.GenIgnore;
 import io.vertx.core.eventbus.EventBus;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
@@ -35,7 +36,8 @@ public class UploadResource {
     // BAW compatible using single document payload
     @POST
     @Consumes(jakarta.ws.rs.core.MediaType.MULTIPART_FORM_DATA)    
-    @APIResponse(responseCode = "202")
+    @APIResponse(responseCode = "202", description = "OK")
+    //public Response upload(@MultipartForm MultipartBody body) throws IOException {
     public Response upload(@MultipartForm MultipartBody body) throws IOException {
 
         if (body != null) {
@@ -60,7 +62,8 @@ public class UploadResource {
                 }
             }
             */
-            LOG.info("upload() single file");
+            if (body.file != null) {
+                LOG.info("upload() single file");
                 LOG.info("===>> filePath: " + body.file.filePath());
                 LOG.info("===>> fileName: " + body.file.fileName());
                 LOG.info("===>> uploadedFile: " + body.file.uploadedFile());
@@ -70,12 +73,15 @@ public class UploadResource {
                 LOG.info("===>> charSet: " + body.file.charSet());
                 LOG.info("----------------------------------");
 
-                if (body.file.contentType().equals("text/plain")) {
+                if ( body.file.contentType() != null && body.file.contentType().equals("text/plain") ) {
                     BufferedReader br = Files.newBufferedReader(body.file.filePath());
                     bus.send("file-service", br);
                 }
 
             LOG.info("upload() before response Accepted");
+            } else {
+                LOG.info("upload() body.file null");
+            }
         } else {
             LOG.info("upload() body empty");
         }
