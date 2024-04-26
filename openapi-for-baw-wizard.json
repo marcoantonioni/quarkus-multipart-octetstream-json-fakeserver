@@ -77,7 +77,7 @@
     },
     "/upload" : {
       "post" : {
-        "tags" : [ "Upload Resource" ],
+        "tags" : [ "Upload Resource (updated for BAW wizard)" ],
         "requestBody" : {
           "content" : {
             "multipart/form-data" : {
@@ -85,7 +85,8 @@
                 "type" : "object",
                 "properties" : {
                   "file" : {
-                    "$ref" : "#/components/schemas/UploadItemSchema"
+                    "type": "string",
+                    "format" : "binary"
                   }
                 }
               }
